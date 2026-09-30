@@ -1,0 +1,16 @@
+{% extends 'base.html' %}{% block title %}Guests{% endblock %}
+{% block content %}
+<div class="page-title"><div><p class="eyebrow dark">MASTER DATA</p><h1>Guest Management</h1><p>Register guests, search records and maintain contact details.</p></div></div>
+<section class="panel form-panel"><div class="section-heading"><div><h2>Add Guest</h2><p class="muted">Email addresses must be unique.</p></div></div>
+<form method="post" class="grid-form">
+<input name="first_name" placeholder="First name" required><input name="last_name" placeholder="Last name" required>
+<input name="phone" placeholder="Phone" pattern="[0-9+ -]{7,15}" required><input type="email" name="email" placeholder="Email" required>
+<input name="address" placeholder="Address"><input name="id_proof" placeholder="ID proof">
+<button class="button">+ Add Guest</button></form></section>
+<section class="panel"><div class="panel-head"><div><h2>Guest Records</h2><p class="muted">{{guests|length}} record(s) shown.</p></div>
+<form class="search" method="get"><input name="q" value="{{q}}" placeholder="Search name, phone or email"><button class="button">Search</button>{% if q %}<a class="button secondary" href="/guests">Clear</a>{% endif %}</form></div>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Guest</th><th>Contact</th><th>Address</th><th>ID Proof</th><th>Actions</th></tr></thead><tbody>
+{% for g in guests %}<tr><td>#{{g.guest_id}}</td><td><strong>{{g.first_name}} {{g.last_name}}</strong></td><td>{{g.phone}}<br><span class="muted">{{g.email}}</span></td><td>{{g.address or '-'}}</td><td>{{g.id_proof or '-'}}</td><td><details class="action-menu"><summary>Edit</summary><form method="post" action="/guests/{{g.guest_id}}/edit" class="mini-form"><input name="first_name" value="{{g.first_name}}" required><input name="last_name" value="{{g.last_name}}" required><input name="phone" value="{{g.phone}}" required><input name="email" type="email" value="{{g.email}}" required><input name="address" value="{{g.address or ''}}"><input name="id_proof" value="{{g.id_proof or ''}}"><button class="button small">Save Changes</button></form><form method="post" action="/guests/{{g.guest_id}}/delete" onsubmit="return confirm('Delete this guest?');"><button class="link-danger">Delete</button></form></details></td></tr>
+{% else %}<tr><td colspan="6" class="empty">No guest records found.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">DATABASE APPLICATION</p>
+    <h1>Hotel Operations Dashboard</h1>
+    <p>Manage guests, rooms, reservations, stays, services, housekeeping, billing and reports from one live database-connected prototype.</p>
+    <div class="hero-actions"><a class="button light" href="/reservations">Create Reservation</a><a class="button ghost" href="/reports">View Reports</a></div>
+  </div>
+  <div class="hero-mark">H</div>
+</section>
+<div class="cards dashboard-cards">
+  <div class="card"><span>Guests</span><strong>{{stats.guests}}</strong><small>Registered</small></div>
+  <div class="card"><span>Rooms</span><strong>{{stats.rooms}}</strong><small>{{stats.occupied}} occupied</small></div>
+  <div class="card"><span>Available Rooms</span><strong>{{stats.available}}</strong><small>Ready to book</small></div>
+  <div class="card"><span>Active Reservations</span><strong>{{stats.reservations}}</strong><small>Pending + confirmed</small></div>
+  <div class="card"><span>Active Stays</span><strong>{{stats.active_stays}}</strong><small>Currently checked in</small></div>
+  <div class="card"><span>Collected Revenue</span><strong>₹{{'%.2f'|format(stats.revenue)}}</strong><small>Successful payments</small></div>
+</div>
+<div class="quick-grid">
+  <a href="/guests" class="quick-card"><b>Guest Management</b><span>Add, search and update guest records →</span></a>
+  <a href="/stays" class="quick-card"><b>Front Desk</b><span>Check-in and check-out stays →</span></a>
+  <a href="/housekeeping" class="quick-card"><b>Housekeeping</b><span>{{stats.housekeeping}} task(s) need attention →</span></a>
+  <a href="/billing" class="quick-card"><b>Billing</b><span>{{stats.outstanding}} invoice(s) have balance →</span></a>
+</div>
+<section class="panel">
+  <div class="panel-head"><div><h2>Recent Reservations</h2><p class="muted">Latest bookings from the live database.</p></div><a class="button" href="/reservations">Manage Reservations</a></div>
+  <div class="table-wrap"><table><thead><tr><th>ID</th><th>Guest</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Status</th></tr></thead><tbody>
+  {% for r in recent %}<tr><td>#{{r.reservation_id}}</td><td><strong>{{r.guest_name}}</strong></td><td>Room {{r.room_number}}</td><td>{{r.check_in_date}}</td><td>{{r.check_out_date}}</td><td><span class="status {{r.status|lower|replace(' ','-')}}">{{r.status}}</span></td></tr>
+  {% else %}<tr><td colspan="6" class="empty">No reservations yet.</td></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+{% endblock %}

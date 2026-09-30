@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block title %}Database Validation{% endblock %}
+{% block content %}
+<div class="page-title"><div><p class="eyebrow dark">DBMS INTEGRITY</p><h1>Database Validation</h1><p>Live checks for constraints and core business rules.</p></div></div>
+<section class="validation-grid">{% for name,ok,detail in checks %}<div class="validation-card {% if ok %}ok{% else %}bad{% endif %}"><div class="validation-icon">{{'✓' if ok else '!'}}</div><div><strong>{{name}}</strong><span>{{detail}}</span></div></div>{% endfor %}</section>
+<section class="panel"><h2>Rules covered</h2><ul class="rule-list"><li>Foreign-key and referential integrity</li><li>Unique guest email values</li><li>Room capacity constraints</li><li>Valid reservation date ranges</li><li>No active overlapping reservations for the same room</li><li>Payments cannot exceed the outstanding invoice balance</li></ul></section>
+{% endblock %}

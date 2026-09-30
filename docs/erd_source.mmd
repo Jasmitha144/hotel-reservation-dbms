@@ -1,0 +1,101 @@
+erDiagram
+    ROOM_TYPE ||--o{ ROOM : contains
+    GUEST ||--o{ RESERVATION : makes
+    ROOM ||--o{ RESERVATION : assigned
+    RATE_PLAN ||--o{ RESERVATION : uses
+    RESERVATION ||--o| STAY : creates
+    STAY ||--o{ SERVICE_REQUEST : creates
+    ROOM ||--o{ HOUSEKEEPING_TASK : has
+    STAY ||--o{ SERVICE_CHARGE : incurs
+    SERVICE_REQUEST ||--o| SERVICE_CHARGE : generates
+    STAY ||--|| INVOICE : billed
+    INVOICE ||--o{ PAYMENT : receives
+
+    ROOM_TYPE {
+      int room_type_id PK
+      string type_name
+      string description
+      int capacity
+      decimal base_rate
+    }
+    ROOM {
+      int room_id PK
+      string room_number UK
+      int room_type_id FK
+      int floor
+      string status
+    }
+    RATE_PLAN {
+      int rate_plan_id PK
+      string plan_name
+      string description
+      decimal rate
+      string cancellation_policy
+    }
+    GUEST {
+      int guest_id PK
+      string first_name
+      string last_name
+      string phone
+      string email UK
+      string address
+      string id_proof
+    }
+    RESERVATION {
+      int reservation_id PK
+      int guest_id FK
+      int room_id FK
+      int rate_plan_id FK
+      date reservation_date
+      date check_in_date
+      date check_out_date
+      int number_of_guests
+      string status
+    }
+    STAY {
+      int stay_id PK
+      int reservation_id FK UK
+      datetime actual_check_in
+      datetime actual_check_out
+      string status
+    }
+    SERVICE_REQUEST {
+      int service_request_id PK
+      int stay_id FK
+      string service_type
+      datetime request_date
+      string status
+    }
+    HOUSEKEEPING_TASK {
+      int task_id PK
+      int room_id FK
+      date task_date
+      string task_type
+      string status
+      string assigned_to
+    }
+    SERVICE_CHARGE {
+      int charge_id PK
+      int stay_id FK
+      int service_request_id FK
+      decimal amount
+      date charge_date
+    }
+    INVOICE {
+      int invoice_id PK
+      int stay_id FK UK
+      date invoice_date
+      decimal room_charge
+      decimal service_charge
+      decimal tax
+      decimal total_amount
+      string status
+    }
+    PAYMENT {
+      int payment_id PK
+      int invoice_id FK
+      date payment_date
+      decimal amount
+      string payment_method
+      string status
+    }
